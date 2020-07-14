@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block title %} Check out {% endblock %}
+
+{% block content %}
+ 
+<div class="bg-light py-3">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 mb-0"><a href="{% url 'index' %}">Home</a> <span class="mx-2 mb-0">/</span> <a href="{% url 'cart' %}">Cart</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Checkout</strong></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="site-section">
+        <div class="container">
+          <div class="row mb-5">
+            <div class="col-md-12">
+              <!-- Alerts -->
+              {% include 'partials/_alerts.html' %}
+              
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-5 mb-md-0">
+              <h2 class="h3 mb-3 text-black">Billing Details</h2>
+              {% if billing %}
+                {% for info in billing %}
+                <div class="p-3 p-lg-5 border">
+                <form action="{% url 'placeorder' %}" method="POST" id="place_order">
+                  {% csrf_token %}
+                  <input type="hidden" name="curency" value="{{curency.curency}}">
+                  <div class="form-group">
+                          <label for="c_country" class="text-black">Country <span class="text-danger">*</span></label>
+                          <select id="c_country" class="form-control">
+                            <option selected value="1">Iran</option>   
+                          </select>
+                    </div>
+                    <div class="form-group row">
+                    <div class="col-md-6">
+                      <label for="first_name" class="text-black">First Name <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="c_fname" name="first_name" value="{{info.first_name}}" >
+                    </div>
+                    <div class="col-md-6">
+                      <label for="last_name" class="text-black">Last Name <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="c_lname" name="last_name" value="{{info.last_name}}">
+                    </div>
+                  </div>
+    
+                  <div class="form-group row">
+                    <div class="col-md-12">
+                      <label for="street_address" class="text-black">Address <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="c_address" name="street_address" placeholder="Street address" value="{{info.street_address}}">
+                    </div>
+                  </div>
+    
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="apartment_address" placeholder="Apartment, suite, unit etc. (optional)" value="{{info.apartment_address}}" >
+                  </div>
+    
+                  <div class="form-group row">
+                    <div class="col-md-6">
+                      <label for="state" class="text-black">State / Country <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="c_state_country" name="state" value="{{info.state}}">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="zipcode" class="text-black">Posta / Zip <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="c_postal_zip" name="zipcode" value="{{info.zipcode}}">
+                    </div>
+                  </div>
+    
+                  <div class="form-group row mb-5">
+                    <div class="col-md-6">
+                      <label for="email" class="text-black">Email Address <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="c_email_address" name="email" value="{{info.email}}">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="phone" class="text-black">Phone <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="c_phone" name="phone" placeholder="Phone Number" value="{{info.phone}}">
+                    </div>
+                  </div>
+                  </form>
+                </div>
+                {% endfor %}
+              {% else %} 
+                <div class="p-3 p-lg-5 border">
+                    <form action="{% url 'placeorder' %}" method="POST" id="place_order">
+                      {% csrf_token %}
+                      <input type="hidden" name="curency" value="{{curency.curency}}">
+                      <div class="form-group">
+                          <label for="c_country" class="text-black">Country <span class="text-danger">*</span></label>
+                          <select id="c_country" class="form-control">
+                            <option selected value="1">Iran</option>   
+                          </select>
+                      </div>
+                      <div class="form-group row">
+                        <div class="col-md-6">
+                          <label for="first_name" class="text-black">First Name <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" id="c_fname" name="first_name" value="{{user.first_name}}" >
+                        </div>
+                        <div class="col-md-6">
+                          <label for="last_name" class="text-black">Last Name <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" id="c_lname" name="last_name" value="{{user.last_name}}">
+                        </div>
+                      </div>
+        
+                      <div class="form-group row">
+                        <div class="col-md-12">
+                          <label for="street_address" class="text-black">Address <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" id="c_address" name="street_address" placeholder="Street address">
+                        </div>
+                      </div>
+        
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="apartment_address" placeholder="Apartment, suite, unit etc. (optional)">
+                      </div>
+        
+                      <div class="form-group row">
+                        <div class="col-md-6">
+                          <label for="state" class="text-black">State / Country <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" id="c_state_country" name="state">
+                        </div>
+                        <div class="col-md-6">
+                          <label for="zipcode" class="text-black">Posta / Zip <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" id="c_postal_zip" name="zipcode" >
+                        </div>
+                      </div>
+        
+                      <div class="form-group row mb-5">
+                        <div class="col-md-6">
+                          <label for="email" class="text-black">Email Address <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" id="c_email_address" name="email" value="{{user.email}}">
+                        </div>
+                        <div class="col-md-6">
+                          <label for="phone" class="text-black">Phone <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" id="c_phone" name="phone" placeholder="Phone Number">
+                        </div>
+                      </div>
+                      </form>
+                    </div>
+              {% endif %} 
+            </div>
+
+            <div class="col-md-6">
+              <div class="row mb-5">
+                <div class="col-md-12">
+                  {% if products %}
+                  <h2 class="h3 mb-3 text-black">Your Order</h2>
+                  <div class="p-3 p-lg-5 border">
+                    <table class="table site-block-order-table mb-5">
+                      <thead>
+                        <th>Product</th>
+                        <th>Total</th>
+                      </thead>
+                      <tbody>
+
+                        {% for product in products %}
+                          <tr>
+                            <td>{{product.product_name}} - {{product.product_size}} <strong class="mx-2">x</strong> {{product.product_quantity}}</td>
+                            <td>${{product.product_price}}</td>
+                          </tr>
+                        {% endfor %}
+                        
+                        <tr>
+                          <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
+                          <td class="text-black">${{subtotal}}</td>
+                        </tr>
+                        <tr>
+                          <td class="text-black font-weight-bold"><strong>Order Total </strong>
+                            {% if subtotal > 500 %}
+                               (free shipping)
+                            {% endif %}  
+                          </td>
+                          <td class="text-black font-weight-bold"><strong>${{order_total}}</strong></td>
+                        </tr>
+                      </tbody>
+                    </table>
+  
+                    <div class="border p-3 mb-3">
+                      <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsebank" role="button" aria-expanded="false" aria-controls="collapsebank">Direct Bank Transfer</a></h3>
+  
+                      <div class="collapse" id="collapsebank">
+                        <div class="py-2">
+                          <p class="mb-0">Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
+                        </div>
+                      </div>
+                    </div>
+  
+                    <div class="border p-3 mb-3">
+                      <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsecheque" role="button" aria-expanded="false" aria-controls="collapsecheque">Cheque Payment</a></h3>
+  
+                      <div class="collapse" id="collapsecheque">
+                        <div class="py-2">
+                          <p class="mb-0">Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
+                        </div>
+                      </div>
+                    </div>
+  
+                    <div class="border p-3 mb-3">
+                      <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsepaypal" role="button" aria-expanded="false" aria-controls="collapsepaypal">Paypal</a></h3>
+  
+                      <div class="collapse" id="collapsepaypal">
+                        <div class="py-2">
+                          <p class="mb-0">Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
+                        </div>
+                      </div>
+                    </div>
+                    {% if curency %}
+                      <div class="border p-3 mb-5">
+                        <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsewallet" role="button" aria-expanded="false" aria-controls="collapsepaypal">Your Wallet</a></h3>
+      
+                        <div class="collapse" id="collapsewallet">
+                          <div class="py-2">
+                          <p class="mb-2">Your wallet curency is : $ {{curency.curency}}</p>
+                          <p class="mb-0">When you have currency in your wallet automaticaly your order's total will minus from your wallet currency . </p>
+                        </div>
+                        </div>
+                      </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <a class="btn btn-primary btn-lg py-3 btn-block" href="javascript:{document.getElementById('place_order').submit()}">Place Order</a>
+                    </div>
+  
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+  
+            </div>
+          </div>
+          <!-- </form> -->
+        </div>
+      </div>
+{% endblock %}

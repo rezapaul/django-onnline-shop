@@ -1,0 +1,145 @@
+
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block title %} {{product.name}} {% endblock %}
+
+{% block content %}
+
+
+
+
+
+
+<div class="bg-light py-3">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 mb-0"><a href="{% url 'index' %}">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Tank Top T-Shirt</strong></div>
+          </div>
+        </div>
+      </div>  
+      <!-- Alerts -->
+      {% include 'partials/_alerts.html' %}
+      <div class="site-section">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <img src="{{product.photo_1.url}}" alt="Image" class="img-fluid">
+            </div>
+            <div class="col-md-6">
+              <h1 class="text-black"><strong>{{product.name}}</strong></h1>
+              <p><strong class="text-primary h6"> Color : {{product.color}}</strong></p>
+              <p>{{product.description}}</p>
+              <p><strong class="text-primary h4">Price : ${{product.price}}</strong></p>
+              
+              <form action="{% url 'addtocart' %}" method="POST">
+                  {% csrf_token %}
+                  <div class="col-md-3">
+                    <select name="product_size" class="form-control">
+                      {% if product.size1 %}
+                      <option selected="true" value="{{product.size1}}">{{product.size1}}</option>
+                      {% endif %}
+                      {% if product.size2 %}
+                      <option value="{{product.size2}}">{{product.size2}}</option> 
+                      {% endif %}
+                      {% if product.size3 %} 
+                      <option value="{{product.size3}}">{{product.size3}}</option>
+                      {% endif %}
+                      {% if product.size4 %} 
+                      <option value="{{product.size4}}">{{product.size4}}</option> 
+                      {% endif %}
+                      {% if product.size5 %} 
+                      <option value="{{product.size5}}">{{product.size5}}</option> 
+                      {% endif %} 
+                  </select>
+                  </div>
+                  <div class="mb-1 d-flex">
+                    <p>
+
+                      
+                    </p>
+                  </div>
+              
+                  <div class="quantity-container d-flex align-items-center mt-15">
+                      <input type="hidden" name="user_id" value="{{user.id}}">
+                      <input type="hidden" name="product_id" value="{{product.id}}">
+                      <input type="hidden" name="product_name" value="{{product.name}}">
+                      <input type="hidden" name="product_price" value="{{product.price}}">
+                      <input type="hidden" name="product_photo"  value="http://127.0.0.1:8000{{product.photo_1.url}}">
+                      <input type="hidden" name="key_del" value="http://127.0.0.1:8000={{user.id}}+{{product.id}}+{{product.name}}+{{product.price}}+">
+
+                  <div class="mb-5">
+                    <div class="input-group mb-3" style="max-width: 120px;">
+                    <div class="input-group-prepend">
+                      <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
+                    </div>
+                    <input type="text" name="product_quantity" class="form-control text-center" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
+                    </div>
+                  </div>
+      
+                  </div>
+                  {% if user.is_authenticated %}
+                    <div style="padding-bottom: 66px;padding-left: 25px;">
+                      <button class="buy-now btn btn-sm btn-primary"><span>Add to Cart</span></button>
+                    </div>
+                    <div style="padding-bottom: 66px;padding-left: 10px;">
+                        <a class="buy-now btn btn-sm btn-primary" href="javascript:{document.getElementById('favorite').submit()}">
+                            <span><i class="icon-heart" aria-hidden="true"></i></span>
+                        </a>
+                    </div>
+                  {% else %}
+                    <div style="padding-bottom: 66px;padding-left: 25px;">
+                        <button class="buy-now btn btn-sm btn-primary" disabled="disabled"><span>Add to Cart (Must be Logged in) </span></button>
+                    </div>
+                  {% endif %}
+                </div>
+                
+              </form>
+              <form action="{% url 'addtofavorite' %}" method="POST" id="favorite">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{product.id}}">
+                <input type="hidden" name="product_name" value="{{product.name}}">
+                <input type="hidden" name="product_price" value="{{product.price}}">
+                <input type="hidden" name="product_photo" value="http://127.0.0.1:8000{{product.photo_1.url}}">
+              </form>
+
+          </div>
+        </div>
+      </div>
+  
+      <div class="site-section block-3 site-blocks-2 bg-light">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-md-7 site-section-heading text-center pt-4">
+              <h2>Featured Products</h2>
+            </div>
+          </div>
+          {% if products %}
+          <div class="row">
+            <div class="col-md-12">
+              <div class="nonloop-block-3 owl-carousel">
+                {% for product in products %}
+                  <div class="item">
+                    <div class="block-4 text-center">
+                      <figure class="block-4-image">
+                        <img src="{{product.photo_1.url}}" alt="Image placeholder" class="img-fluid">
+                      </figure>
+                      <div class="block-4-text p-4">
+                        <h3><a href="{% url 'product' product.id %}">{{product.name}}</a></h3>
+                        <p class="mb-0">Finding perfect t-shirt</p>
+                        <p class="text-primary font-weight-bold">${{product.price}}</p>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+        </div>
+      </div>
+{% endblock %}

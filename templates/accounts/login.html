@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %} Login {% endblock %}
+{% block content %}
+<div class="bg-light py-3">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 mb-0"><a href="{% url 'index' %}">Home</a> <span class="mx-2 mb-0">/</span><strong class="text-black">Account</strong><span class="mx-2 mb-0">/</span><strong class="text-black">Login</strong></div>
+          </div>
+        </div>
+      </div>
+<!-- Alerts -->
+{% include 'partials/_alerts.html' %}
+<!-- Start My Account -->
+<div class="site-section">
+ <div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+          <span style="color:#7971ea;" class="icon-person display-3"></span>
+          <h3 class="billing-title text-center">Login</h3>
+          <p class="text-center mt-80 mb-40">Welcome back! Sign in to your account </p>
+        </div>
+      </div>
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="login-form">
+                <form action="{% url 'login' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label for="username">Username</label>
+                      <input type="text" name="username" class="form-control" required>
+                    </div>
+    
+                    <div class="form-group">
+                      <label for="password2">Password</label>
+                      <input type="password" name="password" class="form-control" required>
+                    </div>
+    
+                    <input type="submit" value="Login" class="btn btn-primary btn-lg py-2 btn-block">
+                    <p> </p>
+                    <div class="mt-20 d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center"><input type="checkbox" class="pixel-checkbox" id="login-1"><label for="login-1">Remember me</label></div>
+                            <a href="{% url 'register' %}">Register to access site</a>
+                    </div>
+                  </form>      
+            </div>
+        </div>
+        
+    </div>
+</div>
+</div>
+<!-- End My Account -->
+
+
+
+{% endblock %}
+

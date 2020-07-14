@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %} dashboard {% endblock %}
+
+
+{% block content %}
+
+
+
+<div class="bg-light py-3">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 mb-0"><a href="{% url 'index' %}">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Account</strong><span class="mx-2 mb-0">/</span> <strong class="text-black">Dashboard</strong></div>
+      </div>
+    </div>
+  </div>
+
+<!-- Alerts -->
+{% include 'partials/_alerts.html' %}
+<!-- Start dashboard Area -->
+<div class="site-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Welcome {{user.first_name}} </h2>
+          <p>Here are the property lists of products that you have bought .</p>
+          {% if orders %}
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Property</th>
+                  <th scope="col">Payment</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for order in orders %}
+                  <tr>
+                    <td>{{order.id}}</td>
+                    <td>{{order.buy_id}}</td>
+                    <td>Successfully</td>
+                    <td>
+                      <a class="btn btn-light" href="{% url 'details' order.buy_id %}">View Detail</a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <p>You didnt bouy anything yet</p>
+          {% endif %}  
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  
+{% endblock %}

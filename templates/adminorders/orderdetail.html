@@ -1,0 +1,115 @@
+{% extends 'admin/base.html' %}
+
+{% load static %}
+{% load i18n %}
+
+
+
+
+
+<div id="header">
+        <div id="branding">
+        {% block branding %}
+   
+            <h1 id="head">
+                <img src="{% static 'images/logo.png' %}" alt="All User Orders" height="35" width="40" class="brand_img"> All User Orders
+            </h1>
+             
+             
+        {% endblock %}
+        </div>
+        {% block usertools %}
+        {% if user.is_authenticated %}
+        <div id="user-tools">
+            {% block welcome-msg %}
+                {% trans 'Welcome,' %}
+                <strong>{% firstof user.get_short_name user.get_username %}</strong>.  /
+                <a href="{% url 'allorders' %}">{% trans 'Back To Orders' %}</a> /
+            {% endblock %}
+            {% block userlinks %}
+                {% if site_url %}
+                    <a href="{{ site_url }}">{% trans 'View site' %}</a> /
+                {% endif %}
+                {% if user.is_active and user.is_staff %}
+                    {% url 'django-admindocs-docroot' as docsroot %}
+                    {% if docsroot %}
+                        <a href="{{ docsroot }}">{% trans 'Documentation' %}</a> /
+                    {% endif %}
+                {% endif %}
+                {% if user.has_usable_password %}
+                <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> /
+                {% endif %}
+                <a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
+            {% endblock %}
+        </div>
+        {% endif %}
+        {% endblock %}
+        {% block nav-global %}{% endblock %}
+    </div>
+
+{% block content %}
+    <div id="content" class="colMS">
+            
+        <h1>Order Num : {{buy_id}} </h1>
+            
+    <div id="content-main">
+        <div class="app-auth module">
+                <div class="col-md-12">
+                    <h2>User Information</h2>
+                    {% for user in userinfo %}
+                        <p>full name : {{user.first_name}} {{user.last_name}}</p><p></p>
+                        <p>address : </p>
+                        <p>{{user.street_address}} {{user.apartment_address}}</p>
+                        <p>state : {{user.state}}</p>
+                        <p>zipcode : {{user.zipcode}}</p>
+                        <p>email : {{user.email}}</p>
+                        <p>phone : {{user.phone}}</p>
+                    {% endfor %}
+                    
+
+                        <h2> Total :  ${{ total }}  | 
+                            {% if shipment %}
+                                  Free Shipment
+                            {% else %}
+                                  Shipment : $10 
+                            {% endif %}            
+                        </h2>
+                        <p></p>
+                {% if orders %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Product</th>
+                            <th scope="col">Size</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Price</th>
+                            <th></th>
+                                
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                            <tr>
+                                <td>{{order.id}}</td>
+                                <td>{{order.product_name}}</td>
+                                <td>{{order.product_size}}</td>
+                                <td>{{order.product_quantity}}</td>
+                                <td>{{order.product_price}}</td>
+                                <td>
+                                   <a class="btn btn-light" href="{% url 'product' order.product_id %}">View Product</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}            
+            </div>
+{% endblock %}
+
+
+{% block extrastyle %}
+   
+   <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+
+{% endblock %}

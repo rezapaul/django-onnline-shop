@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block title %} Favorites {% endblock %}
+
+{% block content %}
+<div class="bg-light py-3">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 mb-0"><a href="{% url 'index' %}">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Account</strong><span class="mx-2 mb-0">/</span> <strong class="text-black">Favorites</strong></div>
+          </div>
+        </div>
+      </div>
+      <!-- Alerts -->
+      {% include 'partials/_alerts.html' %}
+      <div class="site-section">
+          <div class="container">
+              <div class="row">
+                  <div class="col-md-12 text-center">
+                    <span style="color: rgb(216, 32, 32);" class="icon-heart display-3"></span>
+                    <p class="lead mb-5">Your favorite products list.</p>
+                  </div>
+                </div>
+        {% if favorites %}
+            
+              <div class="row mb-5">
+                <div class="col-md-12">
+                  <div class="site-blocks-table">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th class="product-thumbnail">Image</th>
+                          <th class="product-name">Product</th>
+                          <th class="product-price">Price</th>
+                          <th class="product-quantity">Link</th>
+                          <th class="product-remove">Remove</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for f in favorites %}
+                        <tr>
+                          <td class="product-thumbnail">
+                              <a href="{% url 'product' f.product_id %}"><img src="{{f.product_photo}}" alt="Image" class="img-fluid"></a>
+                          </td>
+                          <td class="product-name">
+                            <h2 class="h5 text-black">{{f.product_name}}</h2>
+                          </td>
+                          <td>${{f.product_price}}</td>
+                          <td class="product-name">
+                                <h2 class="h6"><a href="{% url 'product' f.product_id %}">Show</a></h2>
+                              </td>
+                          <td>
+                              <a href="javascript:{document.getElementById('delete').submit()}" class="btn btn-primary btn-sm">
+                                  <span>X</span>
+                              </a>
+                              <form action="{% url 'removefavorite' %}" method="POST" id="delete">
+                                {% csrf_token %}
+                                <input type="hidden" name="f_id" value="{{f.id}}">
+                                <input type="hidden" name="product_id" value="{{f.product_id}}">
+                                <input type="hidden" name="product_name" value="{{f.product_name}}">
+                              </form>     
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+      
+              
+        {% else %}
+        
+            <div class="col-md-12 text-center">
+              <p><span> You Have No Favorites </span></p>
+            </div>
+        </div>
+        {% endif %}
+      
+
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block title %} Cart {% endblock %}
+
+{% block content %}
+<div class="bg-light py-3">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 mb-0"><a href="{% url 'index' %}">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Cart</strong></div>
+          </div>
+        </div>
+      </div>
+      <!-- Alerts -->
+      {% include 'partials/_alerts.html' %}
+      <div class="site-section">
+          <div class="container">
+          
+        {% if products %}
+        <div class="row">
+            <div class="col-md-12 text-center">
+              <span style="color: #7971ea;" class="icon-shop display-3"></span>
+              <p class="lead mb-5">Products That You Added To Your Cart</p>
+            </div>
+          </div>
+              <div class="row mb-5">
+                <div class="col-md-12">
+                  <div class="site-blocks-table">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th class="product-thumbnail">Image</th>
+                          <th class="product-name">Product</th>
+                          <th class="product-price">Price</th>
+                          <th class="product-quantity">Quantity</th>
+                          <th class="product-total">Total</th>
+                          <th class="product-remove">Remove</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for p in products %}
+                        <tr>
+                          <td class="product-thumbnail">
+                              <a href="{% url 'product' p.product_id %}"><img src="{{p.product_photo}}" alt="Image" class="img-fluid"></a>
+                          </td>
+                          <td class="product-name">
+                            <h2 class="h5 text-black">{{p.product_name}}</h2>
+                            <h2 class="h6 text-black">{{p.product_size}}</h2>
+                          </td>
+                          <td>${{p.product_price}}</td>
+                          <td>{{p.product_quantity}}</td>
+                          <td>${{p.product_total}}</td>
+                          <td>
+                              <a href="javascript:{document.getElementById('deletecarting').submit()}" class="btn btn-primary btn-sm">
+                                  <span>X</span>
+                              </a>
+                              <form action="{% url 'deletefromcart' %}" method="POST" id="deletecarting">
+                                {% csrf_token %}
+                                <input type="hidden" name="p_id" value="{{p.id}}">
+                                <input type="hidden" name="product_id" value="{{p.product_id}}">
+                                <input type="hidden" name="product_name" value="{{p.product_name}}">
+                                <input type="hidden" name="product_quantity" value="{{p.product_quantity}}">
+                                <input type="hidden" name="product_size" value="{{p.product_size}}">
+                                <input type="hidden" name="product_total" value="{{p.product_total}}">
+                              </form>     
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="row mb-5">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <form action="{% url 'deleteallcart' %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-primary btn-sm btn-block"> Delete All</button>
+                          </form>
+                     
+                    </div>
+                    <div class="col-md-6">
+                      <a href="{% url 'shop' %}" style="color: #000000;" class="btn btn-outline-primary btn-sm btn-block">Continue Shopping</a>
+                    </div>
+                  </div>
+                  <form class="row" action="{% url 'coupon' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="col-md-12">
+                      <label class="text-black h4" for="coupon">Coupon</label>
+                      <p>Enter your coupon code if you have one.</p>
+                    </div>
+                    <div class="col-md-8 mb-3 mb-md-0">
+                      <form action="{% url 'coupon' %}" method="POST">
+                      <input type="text" name="code" class="form-control py-3" id="coupon" placeholder="Coupon Code">
+                    </div>
+                    <div class="col-md-4">
+                      <button class="btn btn-primary btn-sm">Apply Coupon</button>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="col-md-6 pl-5">
+                  <div class="row justify-content-end">
+                    <div class="col-md-7">
+                      <div class="row">
+                        <div class="col-md-12 text-right border-bottom mb-5">
+                          <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          <span class="text-black">Subtotal</span>
+                        </div>
+                        <div class="col-md-6 text-right">
+                          <strong class="text-black">${{subtotal}}</strong>
+                        </div>
+                      </div>
+                      <div class="row mb-5">
+                        <div class="col-md-6">
+                          <span class="text-black">Total</span>
+                        </div>
+                        <div class="col-md-6 text-right">
+                          <strong class="text-black">${{subtotal}}</strong>
+                        </div>
+                      </div>
+      
+                      <div class="row">
+                        <div class="col-md-12">
+                          <a class="btn btn-primary btn-lg py-3 btn-block" href="{% url 'checkout' %}">Proceed To Checkout</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        {% else %}
+        <div class="row">
+            <div class="col-md-12 text-center">
+              <span style="color: #7971ea;" class="icon-shop display-3"></span>
+              <p><span>No Product Added To Cart ,  <a href="{% url 'shop' %}">Go Shopping Now</a></span></p>
+            </div>
+          </div>
+        
+        {% endif %}
+      </div>
+
+{% endblock %}

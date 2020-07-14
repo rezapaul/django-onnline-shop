@@ -1,0 +1,97 @@
+{% extends 'admin/base.html' %}
+
+{% load static %}
+{% load i18n %}
+
+
+
+
+
+<div id="header">
+        <div id="branding">
+        {% block branding %}
+   
+            <h1 id="head">
+                <img src="{% static 'images/logo.png' %}" alt="All User Orders" height="35" width="40" class="brand_img"> All User Orders
+            </h1>
+             
+             
+        {% endblock %}
+        </div>
+        {% block usertools %}
+        {% if user.is_authenticated %}
+        <div id="user-tools">
+            {% block welcome-msg %}
+                {% trans 'Welcome,' %}
+                <strong>{% firstof user.get_short_name user.get_username %}</strong>. /
+                <a href="{% url 'admin:index' %}">{% trans 'Back To Admin' %}</a> /
+            {% endblock %}
+            {% block userlinks %}
+                {% if site %}
+                    <a href="{{ site_url }}">{% trans 'View site' %}</a> /
+                {% endif %}
+                {% if user.is_active and user.is_staff %}
+                    {% url 'django-admindocs-docroot' as docsroot %}
+                    {% if docsroot %}
+                        <a href="{{ docsroot }}">{% trans 'Documentation' %}</a> /
+                    {% endif %}
+                {% endif %}
+                {% if user.has_usable_password %}
+                <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> /
+                {% endif %}
+                <a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
+            {% endblock %}
+        </div>
+        {% endif %}
+        {% endblock %}
+        {% block nav-global %}{% endblock %}
+    </div>
+    
+{% block content %}
+    <div id="content" class="colMS">
+            
+        <h1>Site administration</h1>
+            
+    <div id="content-main">
+        <div class="app-auth module">
+            <div class="col-md-12">
+                    <h2>Here are the property lists of products that customers have bought</h2>
+                    <p> </p>
+                {% if orders %}
+                <table class="table">
+                  <thead>
+                     <tr>
+                        <th scope="col">OrderId</th>
+                        <th scope="col">UserId</th>
+                        <th scope="col">Property</th>
+                        <th scope="col">Payment</th>
+                        <th scope="col">View Detail</th>
+                     </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                          <tr>
+                            <td>{{order.id}}</td>
+                            <td>{{order.user_id}}</td>
+                            <td>{{order.buy_id}}</td>
+                            <td>Successfully</td>
+                            <td>
+                              <a class="btn btn-light" href="{% url 'orderdetail' order.buy_id %}">View Detail</a>
+                            </td>
+                           </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    <p>Customers didnt bought anything yet</p>
+                {% endif %}            
+            </div>
+{% endblock %}
+
+
+
+{% block extrastyle %}
+   
+   <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+
+{% endblock %}

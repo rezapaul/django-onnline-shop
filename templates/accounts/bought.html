@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+
+{% block title %} Detail {% endblock %}
+
+{% block content %}
+<div class="bg-light py-3">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 mb-0"><a href="{% url 'index' %}">Home</a> <span class="mx-2 mb-0">/</span><a href="{% url 'dashboard' %}">Dashboard</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Detail</strong></div>
+          </div>
+        </div>
+      </div>
+    
+    <!-- Alerts -->
+    {% include 'partials/_alerts.html' %}
+    <!-- Start dashboard Area -->
+    <div class="site-section">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+                
+              <h2>Order : {{buy_id}}</h2>
+              <p><span class="icon-check_circle display-8 text-success"></span> You Successfull Payed  ${{ total }}  for this order .</p>
+              {% if orders %}
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Product</th>
+                      <th scope="col">Size</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Price</th>
+                      <th></th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for order in orders %}
+                      <tr>
+                        <td>{{order.id}}</td>
+                        <td>{{order.product_name}}</td>
+                        <td>{{order.product_size}}</td>
+                        <td>{{order.product_quantity}}</td>
+                        <td>{{order.product_price}}</td>
+                        <td>
+                          <a class="btn btn-light" href="{% url 'product' order.product_id %}">View Product</a>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              {% else %}
+                <p>You didnt bouy anything yet</p>
+              {% endif %}  
+              
+            </div>
+          </div>
+        </div>
+      </div>
+{% endblock %}
