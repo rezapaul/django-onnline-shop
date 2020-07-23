@@ -26,6 +26,8 @@
 
 ![alt text](https://github.com/rezapaul/django-onnline-shop/blob/master/screenshots/Screenshot%20(20).png?raw=true)
 <br />
+![alt text](https://github.com/rezapaul/django-onnline-shop/blob/master/screenshots/Screenshot%20(21).png?raw=true)
+<br />
 ![alt text](https://github.com/rezapaul/django-onnline-shop/blob/master/screenshots/Screenshot%20(22).png?raw=true)
 <br />
 ![alt text](https://github.com/rezapaul/django-onnline-shop/blob/master/screenshots/Screenshot%20(23).png?raw=true)
